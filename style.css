@@ -19,17 +19,24 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Outfit', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     overflow-x: hidden;
-    padding: 20px;
+    padding: 16px;
 }
 
 .background-overlay {
@@ -47,9 +54,9 @@ body {
 }
 
 .container {
-    width: 95%;
+    width: 100%;
     max-width: 1100px;
-    padding: 2rem 0;
+    padding: 0;
     animation: fadeIn 0.8s ease-out;
 }
 
@@ -58,34 +65,40 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===== HEADER ===== */
 .header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
 }
 
 .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     max-width: 600px;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .btn-install {
     background: var(--gradient-brand);
     border: none;
     color: #fff;
-    padding: 0.6rem 1.2rem;
+    padding: 0.55rem 1rem;
     border-radius: 12px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
     transition: all 0.3s ease;
     animation: bounce 2s infinite;
+    white-space: nowrap;
 }
 
 @keyframes bounce {
@@ -104,43 +117,47 @@ body {
     background: var(--card-bg);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--primary);
-    margin-bottom: 1rem;
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.6rem, 6vw, 2.5rem);
     font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
 }
 
 .header h1 span {
     background: var(--gradient-brand);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .header p {
     color: var(--text-muted);
     font-weight: 300;
+    font-size: clamp(0.85rem, 3vw, 1rem);
 }
 
-/* Calculator Grid */
+/* ===== GRID ===== */
 .calculator-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
 }
 
 .card {
-    padding: 2rem;
-    border-radius: 24px;
+    padding: 1.25rem;
+    border-radius: 20px;
     border: 1px solid var(--glass-border);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 
 .card::before {
@@ -164,34 +181,28 @@ body {
     box-shadow: var(--shadow-premium);
 }
 
-.card:hover {
-    transform: translateY(-8px) scale(1.01);
-    border-color: rgba(0, 229, 255, 0.3);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.1);
-}
-
-/* Inputs */
+/* ===== INPUTS ===== */
 h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
     font-weight: 600;
     color: var(--primary);
 }
 
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
 }
 
 input, select {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.75rem 0.9rem;
     background: rgba(0,0,0,0.3);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
@@ -199,31 +210,44 @@ input, select {
     font-size: 1rem;
     outline: none;
     transition: border-color 0.3s;
+    -webkit-appearance: none;
+    appearance: none;
+    max-width: 100%;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.5rem;
 }
 
 input:focus, select:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
 }
 
 .form-row {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .form-row .form-group {
     flex: 1;
+    min-width: 0;
 }
 
 .info-box {
-    margin-top: 1rem;
-    padding: 0.8rem;
+    margin-top: 0.75rem;
+    padding: 0.7rem 0.9rem;
     background: rgba(33, 150, 243, 0.1);
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 0.85rem;
     color: var(--secondary);
+    border: 1px solid rgba(41, 121, 255, 0.2);
 }
 
-/* Results Panel */
+/* ===== RESULTS PANEL ===== */
 .results-panel {
     display: flex;
     flex-direction: column;
@@ -246,23 +270,24 @@ input:focus, select:focus {
 
 .net-salary-container {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .net-salary-container h3 {
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .net-value {
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(2rem, 10vw, 4rem);
     font-weight: 700;
     color: #fff;
     text-shadow: var(--shadow-glow);
-    word-break: break-word;
+    word-break: break-all;
+    line-height: 1.1;
 }
 
 .imgr-badge {
@@ -278,122 +303,69 @@ input:focus, select:focus {
 .quick-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 0.75rem;
     border-top: 1px solid var(--glass-border);
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
 }
 
 .stat .label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     margin-bottom: 0.2rem;
+    line-height: 1.3;
 }
 
 .stat .value {
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    word-break: break-all;
 }
 
-/* Breakdown Panel */
+/* ===== BREAKDOWN PANEL (TABLE) ===== */
 .breakdown-panel {
-    grid-column: span 2;
-}
-
-@media (max-width: 1024px) {
-    .container {
-        width: 90%;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-        align-items: flex-start;
-    }
-
-    .container {
-        width: 100%;
-        padding: 1rem 0;
-    }
-
-    .header h1 {
-        font-size: 2rem;
-    }
-
-    .calculator-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .breakdown-panel {
-        grid-column: span 1;
-    }
-
-    .card {
-        padding: 1.5rem;
-    }
-
-    .header-top {
-        padding: 0 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header h1 {
-        font-size: 1.75rem;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    .net-value {
-        font-size: 2.2rem;
-    }
-
-    .badge {
-        font-size: 0.7rem;
-    }
-
-    .btn-install {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.75rem;
-    }
+    grid-column: span 1;
 }
 
 .table-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 280px;
 }
 
 th {
     text-align: left;
-    padding: 1rem;
-    font-size: 0.8rem;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     border-bottom: 1px solid var(--glass-border);
     text-transform: uppercase;
     letter-spacing: 1px;
+    white-space: nowrap;
 }
 
 td {
-    padding: 1rem;
+    padding: 0.75rem 0.9rem;
     border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 .text-right {
     text-align: right;
+    white-space: nowrap;
 }
 
 .total-row td {
     border-top: 2px solid var(--primary);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.2rem);
     color: var(--primary);
 }
 
@@ -404,21 +376,28 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ===== DISCLAIMER ===== */
 .disclaimer {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     text-align: center;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .disclaimer p {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     line-height: 1.6;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.7rem;
     opacity: 0.7;
 }
 
@@ -428,4 +407,70 @@ input::-webkit-inner-spin-button {
     margin-bottom: 0.4rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* ===== TABLET (768px+) ===== */
+@media (min-width: 640px) {
+    body {
+        padding: 20px;
+    }
+
+    .card {
+        padding: 1.75rem;
+    }
+
+    .header {
+        margin-bottom: 2rem;
+    }
+
+    .calculator-grid {
+        gap: 1.25rem;
+    }
+
+    td, th {
+        padding: 0.9rem 1rem;
+    }
+}
+
+/* ===== DESKTOP (1024px+) ===== */
+@media (min-width: 1024px) {
+    body {
+        align-items: center;
+        padding: 24px;
+    }
+
+    .container {
+        padding: 2rem 0;
+    }
+
+    .header {
+        margin-bottom: 2.5rem;
+    }
+
+    .calculator-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .breakdown-panel {
+        grid-column: span 2;
+    }
+
+    .card {
+        padding: 2rem;
+    }
+
+    .card:hover {
+        transform: translateY(-8px) scale(1.01);
+        border-color: rgba(0, 229, 255, 0.3);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.1);
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    td, th {
+        padding: 1rem;
+    }
 }
