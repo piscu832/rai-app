@@ -97,9 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
-        const vacationPlus = (monthIdx === 11 && vDays > 0) ? (basicoMensual / 25 - basicoMensual / 30) * vDays : 0;
+        
+        let basicoAjustado = basicoMensual;
+        let vacationAmount = 0;
+        if (monthIdx === 11 && vDays > 0) {
+            basicoAjustado = (basicoMensual / 30) * Math.max(0, 30 - vDays);
+            vacationAmount = (basicoMensual / 25) * vDays;
+        }
 
-        let bruto = basicoMensual + montoExtras + vacationPlus;
+        let bruto = basicoAjustado + montoExtras + vacationAmount;
         if (bruto < IMGR_LIMIT) {
             bruto = IMGR_LIMIT;
         }
@@ -130,9 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
-        const vacationPlus = (month === 11 && vacationDays > 0) ? (basicoMensual / 25 - basicoMensual / 30) * vacationDays : 0;
+        
+        let basicWorkingDays = 30;
+        let vacationAmount = 0;
+        if (month === 11 && vacationDays > 0) {
+            basicWorkingDays = Math.max(0, 30 - vacationDays);
+            vacationAmount = (basicoMensual / 25) * vacationDays;
+        }
+        const basicoAjustado = (basicoMensual / 30) * basicWorkingDays;
 
-        let subtotalBruto = basicoMensual + montoExtras + vacationPlus;
+        let subtotalBruto = basicoAjustado + montoExtras + vacationAmount;
         let isImgrApplied = false;
         if (subtotalBruto < IMGR_LIMIT) {
             subtotalBruto = IMGR_LIMIT;
@@ -175,10 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Table
         const categoryName = categorySelect.options[categorySelect.selectedIndex].text.split(':')[0];
         updateTable([
-            { label: `Básico (${categoryName} - 200 hs)`, value: basicoMensual },
+            { label: `Básico (${categoryName} - ${basicWorkingDays} días)`, value: basicoAjustado },
             { label: `Horas Extras (${totalExtras} hs)`, value: montoExtras },
-            { label: `Plus Vacacional (${vacationDays} días)`, value: vacationPlus, hideIfZero: true },
-            { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoMensual + montoExtras + vacationPlus)) : 0, hideIfZero: true },
+            { label: `Vacaciones (${vacationDays} días)`, value: vacationAmount, hideIfZero: true },
+            { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoAjustado + montoExtras + vacationAmount)) : 0, hideIfZero: true },
             { label: `Premio (${premioPerc}%)`, value: premioMonto, hideIfZero: true },
             { label: 'SAC (Aguinaldo)', value: sac, hideIfZero: true },
             { label: 'Retenciones (20.5%)', value: -retenciones, class: 'negative' },
