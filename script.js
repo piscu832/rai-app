@@ -216,9 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event Listeners
+    // Event Listeners — 'change' es necesario para <select> en mobile (Safari iOS)
     [monthSelect, categorySelect, seniorityInput, premioInput, totalExtrasInput, specialJobsInput, vacationDaysInput].forEach(el => {
         el.addEventListener('input', calculate);
+        el.addEventListener('change', calculate);
     });
 
     // Initial calculation
