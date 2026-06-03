@@ -247,6 +247,25 @@ input:focus, select:focus {
     border: 1px solid rgba(41, 121, 255, 0.2);
 }
 
+/* Campo vacaciones - destacado en diciembre */
+#vacation-group {
+    background: rgba(0, 229, 255, 0.06);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: 14px;
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+#vacation-group label {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+#vacation-group input {
+    border-color: rgba(0, 229, 255, 0.4);
+}
+
 /* ===== RESULTS PANEL ===== */
 .results-panel {
     display: flex;

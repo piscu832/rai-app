@@ -123,8 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const specialJobs = parseFloat(specialJobsInput.value) || 0;
         const vacationDays = parseInt(vacationDaysInput.value) || 0;
 
+        // Mostrar/ocultar campo de vacaciones según mes
         if (month === 11) {
             vacationGroup.style.display = 'block';
+            vacationGroup.style.opacity = '1';
         } else {
             vacationGroup.style.display = 'none';
             vacationDaysInput.value = 0;
@@ -190,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTable([
             { label: `Básico (${categoryName} - ${basicWorkingDays} días)`, value: basicoAjustado },
             { label: `Horas Extras (${totalExtras} hs)`, value: montoExtras },
-            { label: `Vacaciones (${vacationDays} días)`, value: vacationAmount, hideIfZero: true },
+            { label: `Vacaciones (${vacationDays} días) — Sueldo/25 × días`, value: vacationAmount, hideIfZero: true },
             { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoAjustado + montoExtras + vacationAmount)) : 0, hideIfZero: true },
             { label: `Premio (${premioPerc}%)`, value: premioMonto, hideIfZero: true },
             { label: 'SAC (Aguinaldo)', value: sac, hideIfZero: true },
