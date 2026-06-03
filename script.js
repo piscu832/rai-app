@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const premioInput = document.getElementById('premio');
     const totalExtrasInput = document.getElementById('totalExtras');
     const specialJobsInput = document.getElementById('specialJobs');
+    const vacationDaysInput = document.getElementById('vacationDays');
+    const vacationGroup = document.getElementById('vacation-group');
     
     const workingDaysSpan = document.getElementById('working-days');
     const netSalaryDiv = document.getElementById('net-salary');
@@ -90,13 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     }
 
-    function getMonthlyGross(monthIdx, baseValue, seniority, premioPerc, totalExtras) {
+    function getMonthlyGross(monthIdx, baseValue, seniority, premioPerc, totalExtras, vDays = 0) {
         const workingDays = getWorkingDays(2026, monthIdx);
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
+        const vacationPlus = (monthIdx === 11 && vDays > 0) ? (basicoMensual / 25 - basicoMensual / 30) * vDays : 0;
 
-        let bruto = basicoMensual + montoExtras;
+        let bruto = basicoMensual + montoExtras + vacationPlus;
         if (bruto < IMGR_LIMIT) {
             bruto = IMGR_LIMIT;
         }
@@ -112,6 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const premioPerc = parseFloat(premioInput.value) || 0;
         const totalExtras = parseFloat(totalExtrasInput.value) || 0;
         const specialJobs = parseFloat(specialJobsInput.value) || 0;
+        const vacationDays = parseInt(vacationDaysInput.value) || 0;
+
+        if (month === 11) {
+            vacationGroup.style.display = 'block';
+        } else {
+            vacationGroup.style.display = 'none';
+            vacationDaysInput.value = 0;
+        }
 
         const workingDays = getWorkingDays(2026, month);
         workingDaysSpan.textContent = workingDays;
@@ -119,8 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
+        const vacationPlus = (month === 11 && vacationDays > 0) ? (basicoMensual / 25 - basicoMensual / 30) * vacationDays : 0;
 
-        let subtotalBruto = basicoMensual + montoExtras;
+        let subtotalBruto = basicoMensual + montoExtras + vacationPlus;
         let isImgrApplied = false;
         if (subtotalBruto < IMGR_LIMIT) {
             subtotalBruto = IMGR_LIMIT;
@@ -138,7 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const endMonth = month === 5 ? 5 : 11;
             let maxBase = 0;
             for (let i = startMonth; i <= endMonth; i++) {
-                const currentMonthGross = getMonthlyGross(i, baseValue, seniority, premioPerc, totalExtras);
+                const vDays = (i === 11) ? vacationDays : 0;
+                const currentMonthGross = getMonthlyGross(i, baseValue, seniority, premioPerc, totalExtras, vDays);
                 if (currentMonthGross > maxBase) maxBase = currentMonthGross;
             }
             sac = maxBase / 2;
@@ -164,7 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTable([
             { label: `Básico (${categoryName} - 200 hs)`, value: basicoMensual },
             { label: `Horas Extras (${totalExtras} hs)`, value: montoExtras },
-            { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoMensual + montoExtras)) : 0, hideIfZero: true },
+            { label: `Plus Vacacional (${vacationDays} días)`, value: vacationPlus, hideIfZero: true },
+            { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoMensual + montoExtras + vacationPlus)) : 0, hideIfZero: true },
             { label: `Premio (${premioPerc}%)`, value: premioMonto, hideIfZero: true },
             { label: 'SAC (Aguinaldo)', value: sac, hideIfZero: true },
             { label: 'Retenciones (20.5%)', value: -retenciones, class: 'negative' },
@@ -188,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listeners
-    [monthSelect, categorySelect, seniorityInput, premioInput, totalExtrasInput, specialJobsInput].forEach(el => {
+    [monthSelect, categorySelect, seniorityInput, premioInput, totalExtrasInput, specialJobsInput, vacationDaysInput].forEach(el => {
         el.addEventListener('input', calculate);
     });
 
