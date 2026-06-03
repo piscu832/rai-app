@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora UOM 2026 | Rama 17</title>
+    <meta name="description" content="Calculadora avanzada de liquidación de haberes para la UOM (Rama 17) - Año 2026.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00e5ff">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135694.png">
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+
+    <main class="container">
+        <header class="header">
+            <div class="header-top">
+                <div class="badge">UOM Rama 17</div>
+                <button id="install-btn" class="btn-install" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Instalar App
+                </button>
+            </div>
+            <h1>Calculadora de Haberes <span>2026</span></h1>
+            <p>Liquidación dinámica con Aguinaldo (SAC) y Ajuste IMGR</p>
+        </header>
+
+        <section class="calculator-grid">
+            <!-- Panel de Entradas -->
+            <div class="card glass input-panel">
+                <h2>Parámetros de Entrada</h2>
+                <div class="form-group">
+                    <label for="month">Mes de Liquidación</label>
+                    <select id="month">
+                        <option value="0">Enero</option>
+                        <option value="1">Febrero</option>
+                        <option value="2">Marzo</option>
+                        <option value="3">Abril</option>
+                        <option value="4">Mayo</option>
+                        <option value="5">Junio</option>
+                        <option value="6">Julio</option>
+                        <option value="7">Agosto</option>
+                        <option value="8">Septiembre</option>
+                        <option value="9">Octubre</option>
+                        <option value="10">Noviembre</option>
+                        <option value="11">Diciembre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Categoría (Valor Hora)</label>
+                    <select id="category">
+                        <option value="4313.43">Ingresante: $4.313,43</option>
+                        <option value="4672.74">Operario Calificado: $4.672,74</option>
+                        <option value="5036.08">Medio Oficial: $5.036,08</option>
+                        <option value="5387.45" selected>Operario Especializado: $5.387,45</option>
+                        <option value="5695.63">Operario Espdo. Múltiple: $5.695,63</option>
+                        <option value="5958.84">Oficial: $5.958,84</option>
+                        <option value="6418.60">Oficial Múltiple: $6.418,60</option>
+                        <option value="6418.60">Oficial Superior: $6.418,60</option>
+                        <option value="6868.42">Oficial Múltiple Superior: $6.868,42</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="seniority">Antigüedad (Años)</label>
+                        <input type="number" id="seniority" value="0" min="0" max="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="premio">Premio (%)</label>
+                        <input type="number" id="premio" value="0" min="0" max="100" step="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="totalExtras">Hs Extras Totales (50%)</label>
+                    <input type="number" id="totalExtras" value="0" min="0" max="200" step="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="specialJobs">Trabajos Especiales ($)</label>
+                    <input type="number" id="specialJobs" value="0" min="0" step="1000">
+                </div>
+
+                <div class="info-box">
+                    <p id="calendar-info">Días Hábiles detectados: <span id="working-days">-</span></p>
+                </div>
+            </div>
+
+            <!-- Panel de Resultados Principales -->
+            <div class="card glass results-panel">
+                <div class="net-salary-container">
+                    <h3>Sueldo Neto Final</h3>
+                    <div id="net-salary" class="net-value">$ 0,00</div>
+                    <p class="imgr-badge" id="imgr-alert" style="display: none;">Ajustado por IMGR</p>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat">
+                        <span class="label">Bruto Remunerativo</span>
+                        <span class="value" id="gross-value">$ 0,00</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">SAC (Aguinaldo)</span>
+                        <span class="value" id="sac-value">$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desglose de Liquidación -->
+            <div class="card glass breakdown-panel">
+                <h2>Desglose de Haberes</h2>
+                <div class="table-container">
+                    <table id="breakdown-table">
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th class="text-right">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Inyectado por JS -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td>Total Neto a Cobrar</td>
+                                <td id="total-net-footer" class="text-right">$ 0,00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer class="disclaimer">
+            <p><strong>Nota de Exención de Responsabilidad (Disclaimer)</strong></p>
+            <p>AVISO IMPORTANTE: La información contenida y generada por esta aplicación tiene un carácter estrictamente
+                informativo y referencial. Los cálculos presentados no constituyen un documento legal, contable ni una
+                liquidación oficial de haberes.</p>
+            <p>Los datos se basan en la escala salarial vigente para abril de 2026 publicada por la Unión Obrera
+                Metalúrgica (UOM). Cualquier variación en la normativa legal, acuerdos paritarios de último momento o
+                especificidades del contrato individual de trabajo podrían alterar los resultados finales. Se recomienda
+                la validación de estos datos con un profesional contable o mediante la consulta de los canales oficiales
+                del sindicato antes de tomar decisiones basadas en esta herramienta.</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
