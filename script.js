@@ -21,24 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // PWA Install Logic
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
-        // Stash the event so it can be triggered later.
         deferredPrompt = e;
-        // Update UI notify the user they can install the PWA
         installBtn.style.display = 'flex';
     });
 
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
-            // Show the install prompt
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
             const { outcome } = await deferredPrompt.userChoice;
             console.log(`User response to the install prompt: ${outcome}`);
-            // We've used the prompt, and can't use it again, throw it away
             deferredPrompt = null;
-            // Hide the install button
             installBtn.style.display = 'none';
         }
     });
@@ -52,9 +45,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const IMGR_LIMIT = 1036390;
     const BONO_NO_REM = 35000;
     const RETENCION_PERCENT = 0.205;
+
+    const CATEGORIES = [
+        { key: 'ingresante', label: 'Ingresante' },
+        { key: 'operario_calificado', label: 'Operario Calificado' },
+        { key: 'medio_oficial', label: 'Medio Oficial' },
+        { key: 'operario_especializado', label: 'Operario Especializado' },
+        { key: 'operario_esp_multiple', label: 'Operario Espdo. Múltiple' },
+        { key: 'oficial', label: 'Oficial' },
+        { key: 'oficial_multiple', label: 'Oficial Múltiple' },
+        { key: 'oficial_superior', label: 'Oficial Superior' },
+        { key: 'oficial_multiple_superior', label: 'Oficial Múltiple Superior' }
+    ];
+
+    const SCALES = {
+        '2026-01': { name: 'Enero 2026', year: 2026, month: 0, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-02': { name: 'Febrero 2026', year: 2026, month: 1, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-03': { name: 'Marzo 2026', year: 2026, month: 2, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-04': { name: 'Abril 2026', year: 2026, month: 3, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-05': { name: 'Mayo 2026', year: 2026, month: 4, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-06': { name: 'Junio 2026', year: 2026, month: 5, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-07': { name: 'Julio 2026', year: 2026, month: 6, imgr: 1036390.00, rates: { ingresante: 4313.43, operario_calificado: 4672.74, medio_oficial: 5036.08, operario_especializado: 5387.45, operario_esp_multiple: 5695.63, oficial: 5958.84, oficial_multiple: 6418.60, oficial_superior: 6418.60, oficial_multiple_superior: 6868.42 } },
+        '2026-08': { name: 'Agosto 2026', year: 2026, month: 7, imgr: 1117862.00, rates: { ingresante: 4485.97, operario_calificado: 4859.65, medio_oficial: 5237.53, operario_especializado: 5602.95, operario_esp_multiple: 5923.46, oficial: 6197.19, oficial_multiple: 6675.34, oficial_superior: 6675.34, oficial_multiple_superior: 7143.16 } },
+        '2026-09': { name: 'Septiembre 2026', year: 2026, month: 8, imgr: 1131201.00, rates: { ingresante: 4485.97, operario_calificado: 4859.65, medio_oficial: 5237.53, operario_especializado: 5602.95, operario_esp_multiple: 5923.46, oficial: 6197.19, oficial_multiple: 6675.34, oficial_superior: 6675.34, oficial_multiple_superior: 7143.16 } },
+        '2026-10': { name: 'Octubre 2026', year: 2026, month: 9, imgr: 1160976.00, rates: { ingresante: 4665.41, operario_calificado: 5054.03, medio_oficial: 5447.03, operario_especializado: 5827.06, operario_esp_multiple: 6160.40, oficial: 6445.08, oficial_multiple: 6942.35, oficial_superior: 6942.35, oficial_multiple_superior: 7428.88 } },
+        '2026-11': { name: 'Noviembre 2026', year: 2026, month: 10, imgr: 1187653.00, rates: { ingresante: 4665.41, operario_calificado: 5054.03, medio_oficial: 5447.03, operario_especializado: 5827.06, operario_esp_multiple: 6160.40, oficial: 6445.08, oficial_multiple: 6942.35, oficial_superior: 6942.35, oficial_multiple_superior: 7428.88 } },
+        '2026-12': { name: 'Diciembre 2026', year: 2026, month: 11, imgr: 1219153.00, rates: { ingresante: 4852.02, operario_calificado: 5256.19, medio_oficial: 5664.91, operario_especializado: 6060.15, operario_esp_multiple: 6406.81, oficial: 6702.88, oficial_multiple: 7220.05, oficial_superior: 7220.05, oficial_multiple_superior: 7726.04 } },
+        '2027-01': { name: 'Enero 2027', year: 2027, month: 0, imgr: 1242469.00, rates: { ingresante: 4949.06, operario_calificado: 5361.32, medio_oficial: 5778.21, operario_especializado: 6181.35, operario_esp_multiple: 6534.95, oficial: 6836.94, oficial_multiple: 7364.45, oficial_superior: 7364.45, oficial_multiple_superior: 7880.56 } },
+        '2027-02': { name: 'Febrero 2027', year: 2027, month: 1, imgr: 1242469.00, rates: { ingresante: 4949.06, operario_calificado: 5361.32, medio_oficial: 5778.21, operario_especializado: 6181.35, operario_esp_multiple: 6534.95, oficial: 6836.94, oficial_multiple: 7364.45, oficial_superior: 7364.45, oficial_multiple_superior: 7880.56 } },
+        '2027-03': { name: 'Marzo 2027', year: 2027, month: 2, imgr: 1264080.00, rates: { ingresante: 5122.28, operario_calificado: 5548.96, medio_oficial: 5980.44, operario_especializado: 6397.70, operario_esp_multiple: 6763.67, oficial: 7076.23, oficial_multiple: 7622.20, oficial_superior: 7622.20, oficial_multiple_superior: 8156.38 } },
+        '2027-04': { name: 'Abril 2027', year: 2027, month: 3, imgr: 1279941.65, rates: { ingresante: 5327.17, operario_calificado: 5770.92, medio_oficial: 6219.66, operario_especializado: 6653.61, operario_esp_multiple: 7034.22, oficial: 7359.28, oficial_multiple: 7927.09, oficial_superior: 7927.09, oficial_multiple_superior: 8482.63 } }
+    };
+
+    function updateCategoryOptions() {
+        const periodKey = monthSelect.value;
+        const scale = SCALES[periodKey] || SCALES['2026-08'];
+        const currentSelected = categorySelect.value || 'operario_especializado';
+
+        categorySelect.innerHTML = CATEGORIES.map(cat => {
+            const rate = scale.rates[cat.key];
+            const selectedAttr = cat.key === currentSelected ? 'selected' : '';
+            return `<option value="${cat.key}" ${selectedAttr}>${cat.label}: ${formatCurrency(rate)}</option>`;
+        }).join('');
+    }
 
     function getWorkingDays(year, month) {
         let count = 0;
@@ -92,22 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     }
 
-    function getMonthlyGross(monthIdx, baseValue, seniority, premioPerc, totalExtras, vDays = 0) {
-        const workingDays = getWorkingDays(2026, monthIdx);
+    function getMonthlyGross(periodKey, catKey, seniority, premioPerc, totalExtras, vDays = 0) {
+        const scale = SCALES[periodKey] || SCALES['2026-08'];
+        const baseValue = scale.rates[catKey] || 0;
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
         
         let basicoAjustado = basicoMensual;
         let vacationAmount = 0;
-        if (monthIdx === 11 && vDays > 0) {
+        if (scale.month === 11 && vDays > 0) {
             basicoAjustado = (basicoMensual / 30) * Math.max(0, 30 - vDays);
             vacationAmount = (basicoMensual / 25) * vDays;
         }
 
         let bruto = basicoAjustado + montoExtras + vacationAmount;
-        if (bruto < IMGR_LIMIT) {
-            bruto = IMGR_LIMIT;
+        if (bruto < scale.imgr) {
+            bruto = scale.imgr;
         }
         
         const premioMonto = bruto * (premioPerc / 100);
@@ -115,16 +151,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function calculate() {
-        const month = parseInt(monthSelect.value);
-        const baseValue = parseFloat(categorySelect.value) || 0;
+        const periodKey = monthSelect.value;
+        const scale = SCALES[periodKey] || SCALES['2026-08'];
+        const catKey = categorySelect.value || 'operario_especializado';
+        const baseValue = scale.rates[catKey] || 0;
         const seniority = parseInt(seniorityInput.value) || 0;
         const premioPerc = parseFloat(premioInput.value) || 0;
         const totalExtras = parseFloat(totalExtrasInput.value) || 0;
         const specialJobs = parseFloat(specialJobsInput.value) || 0;
         const vacationDays = parseInt(vacationDaysInput.value) || 0;
 
-        // Mostrar/ocultar campo de vacaciones según mes
-        if (month === 11) {
+        // Mostrar/ocultar campo de vacaciones en Diciembre
+        if (scale.month === 11) {
             vacationGroup.style.display = 'block';
             vacationGroup.style.opacity = '1';
         } else {
@@ -132,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             vacationDaysInput.value = 0;
         }
 
-        const workingDays = getWorkingDays(2026, month);
+        const workingDays = getWorkingDays(scale.year, scale.month);
         workingDaysSpan.textContent = workingDays;
 
         const valorHoraSeniority = baseValue * (1 + (seniority * 0.01));
@@ -141,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let basicWorkingDays = 30;
         let vacationAmount = 0;
-        if (month === 11 && vacationDays > 0) {
+        if (scale.month === 11 && vacationDays > 0) {
             basicWorkingDays = Math.max(0, 30 - vacationDays);
             vacationAmount = (basicoMensual / 25) * vacationDays;
         }
@@ -149,26 +187,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let subtotalBruto = basicoAjustado + montoExtras + vacationAmount;
         let isImgrApplied = false;
-        if (subtotalBruto < IMGR_LIMIT) {
-            subtotalBruto = IMGR_LIMIT;
+        if (subtotalBruto < scale.imgr) {
+            subtotalBruto = scale.imgr;
             isImgrApplied = true;
         }
         
         const premioMonto = subtotalBruto * (premioPerc / 100);
         const brutoSinSac = subtotalBruto + premioMonto;
         imgrAlert.style.display = isImgrApplied ? 'inline-block' : 'none';
+        imgrAlert.textContent = `Ajustado por IMGR (${formatCurrency(scale.imgr)})`;
 
         // SAC: Mejor mes del semestre (incluyendo premio)
         let sac = 0;
-        if (month === 5 || month === 11) {
-            const startMonth = month === 5 ? 0 : 6;
-            const endMonth = month === 5 ? 5 : 11;
+        if (scale.month === 5 || scale.month === 11) {
+            const yearStr = scale.year.toString();
+            const semesterKeys = scale.month === 5 
+                ? [`${yearStr}-01`, `${yearStr}-02`, `${yearStr}-03`, `${yearStr}-04`, `${yearStr}-05`, `${yearStr}-06`]
+                : [`${yearStr}-07`, `${yearStr}-08`, `${yearStr}-09`, `${yearStr}-10`, `${yearStr}-11`, `${yearStr}-12`];
+            
             let maxBase = 0;
-            for (let i = startMonth; i <= endMonth; i++) {
-                const vDays = (i === 11) ? vacationDays : 0;
-                const currentMonthGross = getMonthlyGross(i, baseValue, seniority, premioPerc, totalExtras, vDays);
+            semesterKeys.forEach(pKey => {
+                const vDays = (pKey.endsWith('-12')) ? vacationDays : 0;
+                const currentMonthGross = getMonthlyGross(pKey, catKey, seniority, premioPerc, totalExtras, vDays);
                 if (currentMonthGross > maxBase) maxBase = currentMonthGross;
-            }
+            });
             sac = maxBase / 2;
         }
 
@@ -188,12 +230,13 @@ document.addEventListener('DOMContentLoaded', () => {
         totalNetFooter.textContent = formatCurrency(netValue);
 
         // Update Table
-        const categoryName = categorySelect.options[categorySelect.selectedIndex].text.split(':')[0];
+        const catObj = CATEGORIES.find(c => c.key === catKey);
+        const categoryName = catObj ? catObj.label : 'Categoría';
         updateTable([
             { label: `Básico (${categoryName} - ${basicWorkingDays} días)`, value: basicoAjustado },
             { label: `Horas Extras (${totalExtras} hs)`, value: montoExtras },
             { label: `Vacaciones (${vacationDays} días) — Sueldo/25 × días`, value: vacationAmount, hideIfZero: true },
-            { label: 'Ajuste IMGR', value: isImgrApplied ? (IMGR_LIMIT - (basicoAjustado + montoExtras + vacationAmount)) : 0, hideIfZero: true },
+            { label: 'Ajuste IMGR', value: isImgrApplied ? (scale.imgr - (basicoAjustado + montoExtras + vacationAmount)) : 0, hideIfZero: true },
             { label: `Premio (${premioPerc}%)`, value: premioMonto, hideIfZero: true },
             { label: 'SAC (Aguinaldo)', value: sac, hideIfZero: true },
             { label: 'Retenciones (20.5%)', value: -retenciones, class: 'negative' },
@@ -216,12 +259,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event Listeners — 'change' es necesario para <select> en mobile (Safari iOS)
-    [monthSelect, categorySelect, seniorityInput, premioInput, totalExtrasInput, specialJobsInput, vacationDaysInput].forEach(el => {
+    // Event listeners
+    monthSelect.addEventListener('change', () => {
+        updateCategoryOptions();
+        calculate();
+    });
+
+    [categorySelect, seniorityInput, premioInput, totalExtrasInput, specialJobsInput, vacationDaysInput].forEach(el => {
         el.addEventListener('input', calculate);
         el.addEventListener('change', calculate);
     });
 
-    // Initial calculation
+    // Initial setup
+    updateCategoryOptions();
     calculate();
 });

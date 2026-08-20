@@ -1,7 +1,7 @@
 {
-  "name": "Calculadora UOM 2026",
-  "short_name": "UOM 2026",
-  "description": "Calculadora avanzada de liquidación de haberes para la UOM Rama 17.",
+  "name": "Calculadora UOM 2026-2027",
+  "short_name": "UOM Calc",
+  "description": "Calculadora avanzada de liquidación de haberes para la UOM Rama 17 (2026-2027).",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#05070a",
