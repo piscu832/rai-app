@@ -134,19 +134,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const basicoMensual = valorHoraSeniority * 200;
         const montoExtras = valorHoraSeniority * 1.5 * totalExtras;
         
-        let basicoAjustado = basicoMensual;
+        let basicWorkingDays = 30;
         let vacationAmount = 0;
         if (scale.month === 11 && vDays > 0) {
-            basicoAjustado = (basicoMensual / 30) * Math.max(0, 30 - vDays);
+            basicWorkingDays = Math.max(0, 30 - vDays);
             vacationAmount = (basicoMensual / 25) * vDays;
         }
+        const basicoAjustado = (basicoMensual / 30) * basicWorkingDays;
 
         let bruto = basicoAjustado + montoExtras + vacationAmount;
         if (bruto < scale.imgr) {
             bruto = scale.imgr;
         }
         
-        const premioMonto = bruto * (premioPerc / 100);
+        const normalHours = (200 / 30) * basicWorkingDays;
+        const valorHoraPremio = valorHoraSeniority * (premioPerc / 100);
+        const premioMonto = (normalHours + totalExtras) * valorHoraPremio;
         return bruto + premioMonto;
     }
 
@@ -192,7 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
             isImgrApplied = true;
         }
         
-        const premioMonto = subtotalBruto * (premioPerc / 100);
+        const normalHours = (200 / 30) * basicWorkingDays;
+        const valorHoraPremio = valorHoraSeniority * (premioPerc / 100);
+        const premioMonto = (normalHours + totalExtras) * valorHoraPremio;
         const brutoSinSac = subtotalBruto + premioMonto;
         imgrAlert.style.display = isImgrApplied ? 'inline-block' : 'none';
         imgrAlert.textContent = `Ajustado por IMGR (${formatCurrency(scale.imgr)})`;
